@@ -70,16 +70,30 @@ function connectVariablesToGLSL() {
 }
 
 function addActionsUI() {
-    console.log('!add UI JS functions!');
+    document.getElementById('clear').onclick =  function() { g_shapesList = []; renderAllShapes(); };
+    // CHANGE TO -- eraser = canvas color
+    document.getElementById('erase').onclick = function() {
+        g_selectedColor = [0.0, 0.0, 0.0, 1.0];
+        // g_selectedType = CIRCLE;
+        console.log('eraser selected');
+    };
+    document.getElementById('white').onclick =  function() { g_selectedColor = [1.0, 1.0, 1.0, 1.0]; };
+    document.getElementById('green').onclick =  function() { g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
+    document.getElementById('red').onclick =    function() { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
+    document.getElementById('blue').onclick =   function() { g_selectedColor = [0.0, 0.0, 1.0, 1.0]; };
+    document.getElementById('yellow').onclick = function() { g_selectedColor = [1.00, 0.852, 0.0100, 1.0]; };
 }
 
 function main() {
     setupWebGL();
     connectVariablesToGLSL();
     addActionsUI();
-    // register function (event handler) to be called on mouse press
-    canvas.onmousedown = cancelIdleCallback;
-    canvas.onmousemove = function(ev) { if (ev.buttons == 1) {cancelIdleCallback(ev)} };
+
+    // NEW implementation
+    let isDrawing = false;
+    canvas.onmousedown = (ev) => { isDrawing = true; click(ev); };
+    canvas.onmouseup = () => { isDrawing = false; };
+    canvas.onmousemove = (ev) => { if (isDrawing) requestAnimationFrame(() => click(ev)); };
     // specify color for clearing <canvas>
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     // clear <canvas>
@@ -87,22 +101,16 @@ function main() {
 }
 
 function click(ev) {
-    // extract event click, return in webGL coords
     let [x, y] = convertCoordinatesEventToGL(ev);
-    // create & store new point
-    let point;
+    let shape;
     if (g_selectedType == POINT) {
-        point = new Point();
+        shape = new Point(x, y, g_selectedColor.slice(), g_selectedSize); // pass color and size from global variables
     } else if (g_selectedType == TRIANGLE) {
-        point = new Triangle();
+        shape = new Triangle(x, y, g_selectedColor.slice(), g_selectedSize); // same for triangle
     } else if (g_selectedType == CIRCLE) {
-        point = new Circle();
-        point.segments = g_selectedSegment;
+        shape = new Circle(x, y, g_selectedColor.slice(), g_selectedSize, g_selectedSegment); // include segment for circle
     }
-    point.position = [x,y];
-    point.color = g_selectedColor.slice();
-    point.size = g_selectedSize;
-    g_shapesList.push(point);
+    g_shapesList.push(shape);
     renderAllShapes();
 }
 
@@ -126,7 +134,7 @@ function renderAllShapes() {
     }
     // check time at end of function & show on page
     var dur = performance.now() - startTime;
-    sendTextToHTML("numdot: " + len + " ms: " + Math.floor(dur) + " fps: " + Math.floor(10000 / dur) / 10, "numdot");
+    sendTextToHTML("num shapes: " + len + " ms: " + Math.floor(dur) + " fps: " + Math.floor(10000 / dur) / 10, "numdot");
 }
 
 function sendTextToHTML(text, htmlID) {

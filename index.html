@@ -1,24 +1,52 @@
 <!DOCTYPE html>
 <head>
+    <meta charset="utf-8">
     <title>webGL paint program</title>
+    <link rel="stylesheet" href="paint.css">
 </head>
-<body>
-    <!-- 
+<body onload="main()">
     <script src="lib/webgl-utils.js"></script>
     <script src="lib/webgl-debug.js"></script>
     <script src="lib/cuon-utils.js"></script>
     <script src="paint.js"></script> 
-    -->
-    <script>
+    <script src="shapes.js"></script>
+   
+    <!-- <script>
     ["lib/webgl-utils.js", "lib/webgl-debug.js", "lib/cuon-utils.js","shapes.js", "paint.js"].forEach(src => {
         const script = document.createElement("script");
         script.src = src;
         document.head.appendChild(script);
       });
-    </script>
+    </script> -->
 
-    <canvas id="webgl" width="400" height="400">Please use browser supporting "canvas"</canvas>
-
-    <h1>webGL paint program</h1>
+    <h1>a paint program</h1>
     <p>created originally for CSE160 at UC Santa Cruz</p>
+    
+    <div class="container">
+        <div class="box">
+            <!-- CANVAS -->
+            <canvas id="webgl" width="400" height="400">
+                Please use browser supporting "canvas"
+            </canvas>
+            <!-- FPS DISPLAY -->
+            <p id="numdot">FPS_INFORMATION</p>
+            <!-- <button type="button" id="clear">clear canvas</button> -->
+            <img src="src/trash-can.png" alt="Clear" id="clear" style="cursor: pointer;" />
+        </div>
+
+        <div class="box">
+            <!-- INTERFACE -->
+            <!-- CHANGE TO -- css space between clear button & color select -->
+             <!-- <button type="button" id="erase">eraser</button> -->
+            <img src="src/eraser.png" alt="Erase" id="erase" style="cursor: pointer;" />
+            <br>
+            <label>brush color</label>
+            <br>
+            <button type="button" id="white">white</button>
+            <button type="button" id="green">green</button>
+            <button type="button" id="red">red</button>
+            <button type="button" id="blue">blue</button>
+            <button type="button" id="yellow">yellow</button>
+        </div>
+    </div>
 </body>
