@@ -77,11 +77,26 @@ function addActionsUI() {
         // g_selectedType = CIRCLE;
         console.log('eraser selected');
     };
+    // colors
     document.getElementById('white').onclick =  function() { g_selectedColor = [1.0, 1.0, 1.0, 1.0]; };
     document.getElementById('green').onclick =  function() { g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
     document.getElementById('red').onclick =    function() { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
     document.getElementById('blue').onclick =   function() { g_selectedColor = [0.0, 0.0, 1.0, 1.0]; };
     document.getElementById('yellow').onclick = function() { g_selectedColor = [1.00, 0.852, 0.0100, 1.0]; };
+    // shapes
+    document.getElementById('pointButton').onclick =    function() { g_selectedType = POINT };
+    document.getElementById('triangleButton').onclick = function() { g_selectedType = TRIANGLE };
+    document.getElementById('circleButton').onclick =   function() { g_selectedType = CIRCLE };
+    // segment slider
+    const segment_slider = document.getElementById('segmentSlide');
+    const segmentLabel = document.getElementById('segmentLabel');
+    segment_slider.addEventListener('input', function() { segmentLabel.textContent = `segments: ${this.value}`; });
+    document.getElementById('segmentSlide').addEventListener('mouseup',  function() { g_selectedSegment = this.value; });
+    // size slider
+    const size_slider = document.getElementById('sizeSlide');
+    const sizeLabel = document.getElementById('sizeLabel');
+    size_slider.addEventListener('input', function() { sizeLabel.textContent = `size: ${this.value}`; });
+    document.getElementById('sizeSlide').addEventListener('mouseup',  function() { g_selectedSize = this.value; });
 }
 
 function main() {

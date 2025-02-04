@@ -10,6 +10,11 @@
     /* border: 1px solid black; */
 }
 
+.selection {
+    font-weight: bold;
+    display: block;
+}
+
 /* BUTTON STYLES */
 #clear {
     width: 50px;
@@ -33,4 +38,13 @@
 }
 #yellow {
     background-color: rgb(255, 217, 3);
+}
+#pointButton {
+    background-color: rgb(255, 255, 255);
+}
+#triangleButton {
+    background-color: rgb(255, 255, 255);
+}
+#circleButton {
+    background-color: rgb(255, 255, 255);
 }
