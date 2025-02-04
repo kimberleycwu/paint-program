@@ -69,34 +69,97 @@ function connectVariablesToGLSL() {
     }
 }
 
+function exportCanvasAsPNG() {
+    const link = document.createElement('a');
+    link.download = 'my_painting.png';
+    link.href = canvas=toDataURL('image/png');
+    link.click();
+}
+
 function addActionsUI() {
-    document.getElementById('clear').onclick =  function() { g_shapesList = []; renderAllShapes(); };
+    document.getElementById('clear').onclick =  function() { 
+        const confirmClear = window.confirm("are you sure you want to clear the canvas?");
+        if (confirmClear) {
+            g_shapesList = [];
+            renderAllShapes(); 
+        }
+    };
     // CHANGE TO -- eraser = canvas color
     document.getElementById('erase').onclick = function() {
         g_selectedColor = [0.0, 0.0, 0.0, 1.0];
-        // g_selectedType = CIRCLE;
         console.log('eraser selected');
+        document.getElementById('clear').classList.add('highlight');
     };
+    // remove highlight when another tool selected
+    // const toolButtons = document.querySelectorAll('.shape-button, .color-button');
+    // toolButtons.forEach(button => { 
+    //     button.addEventListener('click', function() {
+    //         document.getElementById('clear').classList.remove('highlight');
+    //     });
+    // });
+    // export
+    // document.getElementById('exportButton').addEventListener('click', exportCanvasAsPNG);
     // colors
-    document.getElementById('white').onclick =  function() { g_selectedColor = [1.0, 1.0, 1.0, 1.0]; };
-    document.getElementById('green').onclick =  function() { g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
-    document.getElementById('red').onclick =    function() { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
-    document.getElementById('blue').onclick =   function() { g_selectedColor = [0.0, 0.0, 1.0, 1.0]; };
-    document.getElementById('yellow').onclick = function() { g_selectedColor = [1.00, 0.852, 0.0100, 1.0]; };
+    const colorButtons = document.querySelectorAll('.color-button');
+    function setActiveColor(button) {
+        colorButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+    }
+    document.getElementById('white').onclick = function() { 
+        g_selectedColor = [1.0, 1.0, 1.0, 1.0]; 
+        setActiveColor(this);
+    };
+    document.getElementById('green').onclick = function() { 
+        g_selectedColor = [0.0, 1.0, 0.0, 1.0]; 
+        setActiveColor(this);
+    };
+    document.getElementById('red').onclick = function() { 
+        g_selectedColor = [1.0, 0.0, 0.0, 1.0]; 
+        setActiveColor(this);
+    };
+    document.getElementById('blue').onclick = function() { 
+        g_selectedColor = [0.0, 0.0, 1.0, 1.0];
+        setActiveColor(this); 
+    };
+    document.getElementById('yellow').onclick = function() { 
+        g_selectedColor = [1.00, 0.852, 0.0100, 1.0]; 
+        setActiveColor(this);
+    };
     // shapes
-    document.getElementById('pointButton').onclick =    function() { g_selectedType = POINT };
-    document.getElementById('triangleButton').onclick = function() { g_selectedType = TRIANGLE };
-    document.getElementById('circleButton').onclick =   function() { g_selectedType = CIRCLE };
+    const shapeButtons = document.querySelectorAll('.shape-button');
+    function setActiveShape(button, shapeType) {
+        shapeButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        // enable segment slider only if CIRCLE
+        // if (shapeType == CIRCLE) {
+        //     segment_slider.removeAttribute('disabled');
+        // } else {
+        //     segment_slider.setAttribute('disabled', 'true');
+        // }
+    }
+    document.getElementById('pointButton').onclick = function() { 
+        g_selectedType = POINT; 
+        setActiveShape(this);
+    };
+    document.getElementById('triangleButton').onclick = function() { 
+        g_selectedType = TRIANGLE;
+        setActiveShape(this);
+    };
+    document.getElementById('circleButton').onclick = function() { 
+        g_selectedType = CIRCLE;
+        setActiveShape(this);
+    };
     // segment slider
     const segment_slider = document.getElementById('segmentSlide');
     const segmentLabel = document.getElementById('segmentLabel');
-    segment_slider.addEventListener('input', function() { segmentLabel.textContent = `segments: ${this.value}`; });
     document.getElementById('segmentSlide').addEventListener('mouseup',  function() { g_selectedSegment = this.value; });
+    segment_slider.addEventListener('input', function() { segmentLabel.textContent = `${this.value}`; });
     // size slider
     const size_slider = document.getElementById('sizeSlide');
     const sizeLabel = document.getElementById('sizeLabel');
-    size_slider.addEventListener('input', function() { sizeLabel.textContent = `size: ${this.value}`; });
     document.getElementById('sizeSlide').addEventListener('mouseup',  function() { g_selectedSize = this.value; });
+    size_slider.addEventListener('input', function() { sizeLabel.textContent = `${this.value}`; });
+
 }
 
 function main() {

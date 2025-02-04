@@ -1,7 +1,6 @@
 .container {
     display: flex;
 }
-
 .box {
     /* width: 50%; */
     padding: 20px;
@@ -9,12 +8,16 @@
     text-align: left;
     /* border: 1px solid black; */
 }
-
 .selection {
     font-weight: bold;
     display: block;
 }
-
+/* .highlight {
+    filter: brightness(0.7) sepia(1) hue-rotate(40deg);
+    outline: 3px solid yellow;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 0, 0.8);
+} */
 /* BUTTON STYLES */
 #clear {
     width: 50px;
@@ -23,6 +26,17 @@
 #erase {
     width: 60px;
     height: auto;
+}
+.color-button.active {
+    /* background-color: rgb(100, 100, 100); */
+    color: lightslategray;
+}
+.shape-button.active {
+    color: lightslategray;
+}
+#segmentSlide:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 #white{
     background-color: rgb(255, 255, 255);
